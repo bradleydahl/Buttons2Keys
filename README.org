@@ -1,0 +1,126 @@
+#+AUTHOR: Bradley Dahl
+#+DATE: 2015-06-22
+#+EMAIL: bradleydahl179@yahoo.co.uk
+* Buttons2Keys
+  Expanding your game controller's effective button count.
+** What is it?
+   An AutoHotKey (AHK) script to convert joystick button and 1st hat presses
+   from any number of physical joysticks into key presses.
+   If the joysticks you wish to use appears in Windows' game controller list,
+   it will work with Buttons2Keys.
+** Why would I want it?
+   - Your target application does not map straight button combos to any
+     arbitary combination of keys on the keyboard.
+   - Your target application sufficiently handles (or needs to handle) the
+     interpretation of duration/ repeats of the key combos itself.
+   - Your target application adequately handles axis inputs without modification
+     but the button assignment is poor.
+   - You prefer a more programmatic approach to defining your joystick button
+     mapping so that you can access all possible AHK keys.
+   
+   Addresses apps like
+   - DCS A10C
+** Current Limitations
+   - Multiple shift button combo's are not catered for.
+   - Consecutive (or cyclic) button combo's are not catered for.
+   - Keyboard press and releases are in step with joystick button press and
+     releases. No auto repeat or forced delay is built in.
+   - Any button presses happening between the service periods will not be serviced.
+   - Only one POV switch is handled per joystick.
+** Features
+   * Full set of AHK key definitions possible in a sequence
+   * Shortcuts with high number of simultaneous key presses
+   * Any number of defined shift buttons
+** How does it work?
+   - Only requires AutoHotKey to operate (version AutoHotkey104805.zip is
+     recommended).
+   - The user specifies joystick buttons and creates the PC keyboard commands in
+     an AutoHotKey (AHK) script. When executed, the AHK script then polls for
+     button presses and simulates key presses or releases as appropriate.
+   - By specifying some joystick buttons as Shift modifiers, the number of
+     possible combinations is greatly increased.
+   - Note that the chosen key combinations need to be defined in the target
+     application.
+** Synopsis
+   #+BEGIN_SRC AHK-mode
+   #Persistent
+
+   JoyID = 2
+
+   Init()
+
+   ; ==============SHIFT=BUTTONS=DEFINED=HERE========================
+   OrangeJoyShift = %JoyID%Joy7
+   BlueJoyShift = %JoyID%Joy8
+   
+   RegisterMapping(JoyID, 1, "Cannon", 1) ; Fire cannon
+   CannonButton1 = Space ; Fire cannon
+   
+   ;-------------Orange shifted buttons and POV-----------------
+   RegisterShiftMapping(JoyID, 4, "Orange", "AirBrkOpn", 2) ; Open Air Brake
+   AirBrkOpnButton1 = LCtrl
+   AirBrkOpnButton2 := "b"
+   
+   RegisterShiftPOVMapping(JoyID, 2, "Orange", "TrimUp", 2) ; Trim switch
+   TrimUpButton1 = RCtrl
+   TrimUpButton2 := ";"
+   
+   ; ...
+   ; other shift, POV and non-shift mappings
+   ; ...
+
+   Run()
+
+   #Include Buttons2Keys.ahk
+   #+END_SRC
+** Helpful Tips
+   + Determining the button IDs of your joystick
+     Use the AutoHotKey script given at http://www.autohotkey.com/docs/scripts/JoystickTest.htm
+   + Determining the ID of your joystick
+     Use the joy-list.ahk script to list all possible joysticks and their ID numbers recognized by Windows on your system.
+   + Make sure the modifier keys occur before the letter/ digit/ function keys in the PC keyboard sequences.
+     For example, k and then Shift will only cause lower case k to be the result. Shift/ Control/ Alt/ Win will need to be placed before the letter or digit in such sequences. (Just follow the order in which you manually press the keys to do the operation.)
+   # + button and shift naming conventions <2014-06-09 Mon>
+   # + Key names should not use the word Button in them <2014-06-09 Mon>
+* Alternative Software Solutions
+** Joy2Key
+*** Cons
+    Mappings to single keys only.
+    Axes map to single keys in simple on/off threshold manner only.
+** Joystick 2 Mouse 3
+*** Cons
+    Trojan risk found when using Tucows to install it.
+    Did not detect my /Logitech Extreme 3D Pro/ stick on Win7.
+** UJR - Universal Joystick Remapper (Using vJoy)
+*** Cons
+    Uses seperate app vJoy to implement functionality
+    Primary items remapped cannot target keyboard
+** Pinnacle Game Profiler
+*** Cons
+    Not free software
+** Logitech Gaming Software
+*** Pros
+    Nice interface
+    Does the basic job intended for Buttons2Keys
+*** Cons
+    Logitech controllers specific
+    May not allow generic button combos (eg 'Shft-C-F')
+    May not allow distinctions between left and right modifiers (Alt, Shift, etc)
+* Design Issues To Address
+** Headers
+   Document the important global arrays. Explain the workings in terms of these.
+** Error Handling
+   Handle these at registration/ initialization if possible
+* Example configurations
+** DCS A10C
+   # CDUKeyEcho.ahk needs to be used in conjunction with the script for voice command recognition.
+   Oddities to take care of in DCS
+   1. No DCS key modifiers must exist for the Joystick buttons being used, as AHK does not seem to detect such buttons.
+   2. Some AHK created key sequences were not recognized by DCS. To work around this, problematic key sequences were echoed via a seperate AHK script. The contents were simply hotkey definitions of the form:
+      :   $<^<#a::
+      :     Send {LCtrl Down}{LWin Down}a{LWin Up}{LCtrl Up}
+      :     return
+** Orbiter XR5 Vanguard
+   # Provide ability for hands free flight operations
+   Attitude Hold/ Descent Hold/ Airspeed Hold
+** X3 Reunion
