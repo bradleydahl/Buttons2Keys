@@ -1,5 +1,5 @@
 #+AUTHOR: Bradley Dahl
-#+DATE: 2015-06-22
+#+DATE: 2015-10-25
 #+EMAIL: bradleydahl179@yahoo.co.uk
 * Buttons2Keys
   Expanding your game controller's effective button count.
@@ -114,13 +114,17 @@
 * Example configurations
 ** DCS A10C
    # CDUKeyEcho.ahk needs to be used in conjunction with the script for voice command recognition.
-   Oddities to take care of in DCS
-   1. No DCS key modifiers must exist for the Joystick buttons being used, as AHK does not seem to detect such buttons.
+   The script is to be used in conjunction with A-10C Sim control settings. Oddities to take care of in DCS are:
+   1. No user defined DCS key modifiers must exist for the Joystick buttons being used, as AHK does not reliably detect such buttons. (Default modifiers Left/Right Alt, Ctrl, Shift, Win work as expected and are needed.)
    2. Some AHK created key sequences were not recognized by DCS. To work around this, problematic key sequences were echoed via a seperate AHK script. The contents were simply hotkey definitions of the form:
       :   $<^<#a::
       :     Send {LCtrl Down}{LWin Down}a{LWin Up}{LCtrl Up}
       :     return
+   3. The default assignments for the joystick buttons need to be deleted.
+   4. The default key assignments for the actions are assumed to apply for the script to work. See KeyFuncAssign.txt for the expected layout as at the time of this release.
 ** Orbiter XR5 Vanguard
-   # Provide ability for hands free flight operations
-   Attitude Hold/ Descent Hold/ Airspeed Hold
+   This layout aims to provide ability for hands free flight operations.
+   Shift buttons are used to perform similar 'tweak' operations for Attitude Hold, Descent Hold and Airspeed Hold.
 ** X3 Reunion
+   This layout aims to provide ability for hands free dog fighting control.
+   There are some unresolved control issues where X3 Reunion seems to override this AHK script operation.
