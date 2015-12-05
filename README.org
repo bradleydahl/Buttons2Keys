@@ -122,6 +122,8 @@
       :     return
    3. The default assignments for the joystick buttons need to be deleted.
    4. The default key assignments for the actions are assumed to apply for the script to work. See KeyFuncAssign.txt for the expected layout as at the time of this release.
+
+   Note that the diagram and mapping used, are not mine.
 ** Orbiter XR5 Vanguard
    This layout aims to provide ability for hands free flight operations.
    Shift buttons are used to perform similar 'tweak' operations for Attitude Hold, Descent Hold and Airspeed Hold.
